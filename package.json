@@ -1,14 +1,24 @@
 {
   "name": "codegpt",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "A CLI tool to generate code using OpenAI's GPT-3",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "codegpt": "./index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AppletsGroup/CodeGPT"
+  },
+  "keywords": [
+    "openai",
+    "gpt-3",
+    "cli",
+    "generator",
+    "code"
+  ],
+  "author": "AppletsGroup",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.3.4",
     "commander": "^10.0.0",
