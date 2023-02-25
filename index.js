@@ -18,12 +18,11 @@ async function generateCode(prompt, apiKey) {
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0.7,
-    max_tokens: 256,
+    max_tokens: 2048,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
   });
-  console.log(response.data)
   // const data = response.data.choices[0].text.trim();
   const data = response.data.choices.map(choice => choice.text.trim()).join('\n');
 
@@ -48,14 +47,15 @@ async function isExistOpenApiKey() {
 }
 
 async function promptFilePath() {
+  const defaultPath = process.cwd();
   const { filePath } = await prompts({
     type: 'text',
     name: 'filePath',
     message: 'Enter file path (default: current directory):',
-    initial: process.cwd() // use current working directory as initial value
+    initial: defaultPath
   });
 
-  return filePath || process.cwd(); // use entered file path, or current working directory
+  return filePath || defaultPath;
 }
 
 async function getLanguage() {
@@ -66,6 +66,7 @@ async function getLanguage() {
     choices: [
       { title: 'JavaScript', value: { text: 'JavaScript', ext: 'js' } },
       { title: 'TypeScript', value: { text: 'TypeScript', ext: 'ts' } },
+      { title: 'React + TypeScript', value: { text: 'React in TypeScript', ext: 'tsx' } },
       { title: 'Python', value: { text: 'Python', ext: 'py' } },
       { title: 'Ruby', value: { text: 'Ruby', ext: 'rb' } },
       { title: 'Java', value: { text: 'Java', ext: 'java' } },
@@ -92,6 +93,12 @@ const createCodeFiles = async ({ language, fileName, filePath, request }) => {
 const run = async () => {
   await isExistOpenApiKey()
 
+  const { request } = await prompts({
+    type: "text",
+    name: "request",
+    message: "Give the description of code you want to generate",
+  });
+
   const language = await getLanguage()
 
   const { fileName } = await prompts({
@@ -101,12 +108,6 @@ const run = async () => {
   });
 
   const filePath = await promptFilePath();
-
-  const { request } = await prompts({
-    type: "text",
-    name: "request",
-    message: "Enter code request",
-  });
 
   await createCodeFiles({ language, fileName, filePath, request });
 };
